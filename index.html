@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Testing Sandbox</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="shell">
+  <div class="toolbar">
+    <h1>Chatbot Testing Sandbox</h1>
+    <div class="group" id="deviceGroup">
+      <span class="tb-label">Breakpoint</span>
+      <select id="deviceSel" class="tb-btn" onchange="setDevice(this.value)">
+        <option value="mobile">Mobile</option>
+        <option value="desktop">Desktop</option>
+      </select>
+    </div>
+    <div class="group">
+      <span class="tb-label">User Flow</span>
+      <select id="scenarioSel" class="tb-btn" onchange="setScenario(this.value)">
+        <option value="components">Provider search (components)</option>
+      </select>
+      <button class="tb-btn" onclick="restartFlow()">↺ Restart</button>
+      <button class="tb-btn" id="autoBtn" onclick="toggleAuto()">▶ Auto-play</button>
+    </div>
+    <div class="spacer"></div>
+    <div class="group">
+      <button class="tb-btn edit-btn" id="editBtn" onclick="openEditMode()">✎ Edit Mode</button>
+      <button class="tb-btn active" id="annoBtn" onclick="toggleAnno()">Annotations</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="stage">
+      <div class="device mobile" id="device">
+        <div class="statusbar"><span>9:41</span><span class="notch"></span><span class="icons">▮▮ ⌁ ▉</span></div>
+        <div class="app-header">
+          <button class="close" aria-label="Close">✕</button>
+          <span class="app-tab active">Conversation</span>
+          <span class="app-tab">Takeaways</span>
+          <span class="more">⋯</span>
+        </div>
+        <div class="chat-scroll" id="chat"></div>
+        <div class="composer">
+          <button class="plus" aria-label="Add">+</button>
+          <div class="field">
+            <input id="composerInput" placeholder="Ask anything..." aria-label="Message">
+            <span class="mic">🎙</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="anno" id="anno">
+      <div class="anno-tabs">
+        <button class="active" id="tabFlow" onclick="setAnnoTab('flow')">Scenario flow</button>
+        <button id="tabContent" onclick="setAnnoTab('content')">Content</button>
+      </div>
+      <div class="anno-body" id="annoBody"></div>
+    </aside>
+  </div>
+</div>
+
+
+<div class="modal-backdrop" id="editModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+    <div class="modal-head">
+      <h2 id="editTitle">Edit Mode · Add a scenario</h2>
+      <button class="modal-close" onclick="closeEditMode()" aria-label="Close">✕</button>
+    </div>
+    <p class="modal-hint">Build the conversation turn by turn, or paste text and review the imported turns. Labels are auto-generated (Turn 01 — User, Turn 02 — Bot…).</p>
+    <input id="editTitleInput" class="modal-input" placeholder="Scenario title (optional)">
+
+    <div class="turn-list" id="turnList"></div>
+    <div class="turn-tools">
+      <button class="tb-btn" onclick="addTurnRow()">+ Add turn</button>
+      <button class="tb-btn" onclick="togglePastePanel()" id="pasteToggle">Paste text…</button>
+    </div>
+
+    <div class="paste-panel" id="pastePanel" hidden>
+      <textarea id="pasteContent" class="modal-textarea" placeholder="User: Is my dermatologist in network?&#10;Bot: I can help with that. What's your ZIP code?&#10;User: 06002"></textarea>
+      <div class="modal-actions" style="justify-content:flex-start">
+        <button class="tb-btn" onclick="importPastedText()">Import as turns</button>
+      </div>
+    </div>
+
+    <div class="modal-error" id="editError" hidden></div>
+    <div class="modal-actions">
+      <button class="tb-btn" onclick="closeEditMode()">Cancel</button>
+      <button class="tb-btn primary" onclick="testContent()">Test this content</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
